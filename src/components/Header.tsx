@@ -12,8 +12,8 @@ export function Header() {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setMobileMenuOpen(false);
+     const y = element.getBoundingClientRect().top + window.scrollY - 110;
+      window.scrollTo({ top: y, behavior: 'smooth' });
     }
   };
 

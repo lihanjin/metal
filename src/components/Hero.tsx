@@ -7,6 +7,14 @@ import { Badge } from './ui/badge';
 export function Hero() {
   const { t } = useLanguage();
   const { theme } = useTheme();
+  
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      const y = element.getBoundingClientRect().top + window.scrollY - 110;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  };
 
   return (
     <section id="home" className="relative py-20 md:py-32 overflow-hidden">
@@ -60,6 +68,7 @@ export function Hero() {
               {t('hero.cta1')}
             </Button>
             <Button 
+            onClick={() => scrollToSection('products')}  
               size="lg" 
               variant="outline"
               className="font-semibold"
