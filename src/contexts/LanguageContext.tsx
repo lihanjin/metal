@@ -44,6 +44,15 @@ const translations = {
     'prices.chartReady': 'Chart Ready',
     'prices.apiPending': 'API Integration Pending',
     'prices.footer': 'Live Market Data • Updates every 3 seconds',
+    'prices.updated': 'Last updated',
+    'prices.perOz': 'Per Troy Oz',
+    'prices.dataSource': 'Data source: alltick.io',
+    'prices.dataSourceShort': 'Live data from alltick.io',
+    'prices.chartLoading': 'Loading chart...',
+    'prices.price': 'Price',
+    'metal.gold': 'Gold',
+    'metal.silver': 'Silver',
+    'metal.platinum': 'Platinum',
     
     // Gold Prices Widget
     'goldPrices.title': 'Live Gold Prices (HKD/oz)',
@@ -205,6 +214,15 @@ const translations = {
     'prices.chartReady': '圖表就緒',
     'prices.apiPending': 'API整合進行中',
     'prices.footer': '實時市場數據 • 每30秒更新',
+    'prices.updated': '更新時間',
+    'prices.perOz': '每金衡盎司',
+    'prices.dataSource': '數據來源：alltick.io',
+    'prices.dataSourceShort': '來自 alltick.io 的實時數據',
+    'prices.chartLoading': '圖表加載中...',
+    'prices.price': '價格',
+    'metal.gold': '黃金',
+    'metal.silver': '白銀',
+    'metal.platinum': '鉑金',
     
     // Gold Prices Widget
     'goldPrices.title': '黃金即時價格 (港元/盎司)',

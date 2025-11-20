@@ -66,12 +66,14 @@ export function LivePricesFeed() {
   // 合并 loading 状态
   const loading = goldLoading || silverLoading || platinumLoading;
 
+
+
   // 处理K线数据，转换为显示格式
   const metals = useMemo<MetalDisplay[]>(() => {
     // 创建默认的空数据
     const createEmptyMetal = (code: string): MetalDisplay => ({
       symbol: code,
-      name: metalNameMap[code] || code,
+     name: metalNameMap[code] || code,
       usdPerOz: 0,
       perGram: 0,
       changePercent: 0,
@@ -104,7 +106,7 @@ export function LivePricesFeed() {
 
       return {
         symbol: code,
-        name: metalNameMap[code] || code,
+         name: metalNameMap[code] || code,
         usdPerOz: currentPrice,
         perGram: ozToGrams(currentPrice),
         changePercent,
@@ -148,7 +150,7 @@ export function LivePricesFeed() {
             {t('prices.subtitle')}
           </p>
           <div className="flex items-center justify-center gap-2 mt-4 text-sm text-muted-foreground">
-            <span>Last updated: {lastUpdate.toLocaleTimeString()}</span>
+            <span>{t('prices.updated')}: {lastUpdate.toLocaleTimeString()}</span>
             <button
               onClick={handleRefresh}
               className="ml-2 p-1 rounded hover:bg-muted/50 transition-colors"
@@ -258,17 +260,13 @@ export function LivePricesFeed() {
 
                     <div className="pt-4 border-t">
                       <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm text-muted-foreground">
-                          Per Troy Oz
-                        </span>
+                        <span className="text-sm text-muted-foreground">{t('prices.perOz')}</span>
                         <span className="text-sm font-semibold">
                           {metal.price === '--' ? '--' : `$${metal.usdPerOz.toFixed(2)}`}
                         </span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-muted-foreground">
-                          Per Gram
-                        </span>
+                        <span className="text-sm text-muted-foreground">{t('products.perGram')}</span>
                         <span className="text-sm font-semibold">
                           {metal.price === '--' ? '--' : `$${metal.perGram.toFixed(2)}`}
                         </span>
@@ -302,7 +300,7 @@ export function LivePricesFeed() {
         <div className="text-center mt-8 text-sm text-muted-foreground">
           <p>{t('prices.footer')}</p>
           <p className="mt-2">
-            Data source: Alltick-API | Updated:{' '}
+            {t('prices.dataSource')} | {t('prices.updated')}: {' '}
             {metals.some(m => m.price !== '--') 
               ? new Date(metals.find(m => m.price !== '--')?.timestamp || Date.now()).toLocaleString()
               : '--'}
@@ -396,7 +394,7 @@ export function LiveGoldPrices() {
 
           <div className="text-center mt-6 text-sm text-muted-foreground">
             <p>{t('goldPrices.footer')}</p>
-            <p className="mt-2 text-xs">Live data from Alltick-API</p>
+            <p className="mt-2 text-xs">{t('prices.dataSourceShort')}</p>
           </div>
         </div>
       </div>

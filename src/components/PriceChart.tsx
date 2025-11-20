@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 import type { KlineItem } from '@/hooks/use-kline-data';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from './ui/chart';
 import { AreaChart, Area, XAxis, YAxis } from 'recharts';
@@ -8,6 +9,7 @@ interface PriceChartProps {
 }
 
 export function PriceChart({ klineList }: PriceChartProps) {
+  const { t } = useLanguage();
   const history = useMemo(() => {
     return (klineList || []).map((k) => ({
       timestamp: parseInt(k.timestamp) * 1000,
@@ -18,13 +20,13 @@ export function PriceChart({ klineList }: PriceChartProps) {
   if (history.length === 0) {
     return (
       <div className="h-24 bg-muted/50 rounded flex items-center justify-center text-xs text-muted-foreground">
-        Loading chart...
+        {t('prices.chartLoading')}
       </div>
     );
   }
 
   const isPositive = history[history.length - 1].price >= history[0].price;
-  const config = { price: { label: 'Price', color: isPositive ? '#10b981' : '#ef4444' } };
+  const config = { price: { label: t('prices.price'), color: isPositive ? '#10b981' : '#ef4444' } };
 
   return (
     <ChartContainer config={config} className="h-24 aspect-auto">
