@@ -1,45 +1,98 @@
+import { useMemo } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Card, CardContent } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
+import { useTradeTickData } from '../hooks/use-trade-tick-data';
+
+// 将金衡盎司转换为克的辅助函数
+const ozToGrams = (pricePerOz: number) => {
+  return pricePerOz / 31.1035;
+};
+
+// 产品配置（固定信息）
+const productConfigs = [
+  {
+    name: 'Gold Bar 1g',
+    weight: '1 Gram',
+    weightInGrams: 1,
+    refinery: 'PAMP Suisse',
+    premium: 0.05, // 5% 溢价
+    image: 'https://storage.googleapis.com/blink-core-storage/projects/passto-metal-gold-bullion-portal-2ygkmcpt/images/generated-image-1763535234380-0.webp'
+  },
+  {
+    name: 'Gold Bar 1 Tael',
+    weight: '1 Tael (37.5g)',
+    weightInGrams: 37.5,
+    refinery: 'Heraeus',
+    premium: 0.03, // 3% 溢价
+    image: 'https://storage.googleapis.com/blink-core-storage/projects/passto-metal-gold-bullion-portal-2ygkmcpt/images/generated-image-1763535234625-0.webp'
+  },
+  {
+    name: 'Gold Bar 1kg',
+    weight: '1 Kilogram',
+    weightInGrams: 1000,
+    refinery: 'Metalor',
+    premium: 0.02, // 2% 溢价
+    image: 'https://storage.googleapis.com/blink-core-storage/projects/passto-metal-gold-bullion-portal-2ygkmcpt/images/generated-image-1763534334703-0.webp'
+  },
+  {
+    name: 'Gold Grains',
+    weight: 'Per Gram',
+    weightInGrams: 1,
+    refinery: 'Swiss Refineries',
+    premium: 0.06, // 6% 溢价
+    image: 'https://storage.googleapis.com/blink-core-storage/projects/passto-metal-gold-bullion-portal-2ygkmcpt/images/generated-image-1763534853089-0.webp'
+  }
+];
 
 export function Products() {
   const { t } = useLanguage();
+  
+  // 获取黄金价格数据
+  const { data, loading } = useTradeTickData();
 
-  const products = [
-    {
-      name: 'Gold Bar 1g',
-      weight: '1 Gram',
-      refinery: 'PAMP Suisse',
-      pricePerGram: 650,
-      total: 650,
-      image: 'https://storage.googleapis.com/blink-core-storage/projects/passto-metal-gold-bullion-portal-2ygkmcpt/images/generated-image-1763535234380-0.webp'
-    },
-    {
-      name: 'Gold Bar 1 Tael',
-      weight: '1 Tael (37.5g)',
-      refinery: 'Heraeus',
-      pricePerGram: 640,
-      total: 24000,
-      image: 'https://storage.googleapis.com/blink-core-storage/projects/passto-metal-gold-bullion-portal-2ygkmcpt/images/generated-image-1763535234625-0.webp'
-    },
-    {
-      name: 'Gold Bar 1kg',
-      weight: '1 Kilogram',
-      refinery: 'Metalor',
-      pricePerGram: 630,
-      total: 630000,
-      image: 'https://storage.googleapis.com/blink-core-storage/projects/passto-metal-gold-bullion-portal-2ygkmcpt/images/generated-image-1763534334703-0.webp'
-    },
-    {
-      name: 'Gold Grains',
-      weight: 'Per Gram',
-      refinery: 'Swiss Refineries',
-      pricePerGram: 645,
-      total: 645,
-      image: 'https://storage.googleapis.com/blink-core-storage/projects/passto-metal-gold-bullion-portal-2ygkmcpt/images/generated-image-1763534853089-0.webp'
+  // 处理产品数据，根据实时价格计算
+  const products = useMemo(() => {
+    // 从接口数据中获取黄金价格
+    let goldPricePerOz = 0;
+    
+    if (data && (data as any)?.data?.tick_list) {
+      const goldTick = (data as any).data.tick_list.find(
+        (item: any) => item.code === 'GOLD'
+      );
+      if (goldTick) {
+        goldPricePerOz = parseFloat(goldTick.price);
+      }
     }
-  ];
+
+    // 如果没有数据，返回默认值（显示 --）
+    if (goldPricePerOz === 0) {
+      return productConfigs.map(config => ({
+        ...config,
+        pricePerGram: '--',
+        total: '--',
+      }));
+    }
+
+    // 计算每克价格（美元）
+    const pricePerGramUSD = ozToGrams(goldPricePerOz);
+    
+    // 转换为产品数据
+    return productConfigs.map(config => {
+      // 计算每克价格（含溢价，美元）
+      const pricePerGram = pricePerGramUSD * (1 + config.premium);
+      
+      // 计算总价（美元）
+      const total = pricePerGram * config.weightInGrams;
+
+      return {
+        ...config,
+        pricePerGram: Math.round(pricePerGram * 100) / 100, // 保留两位小数
+        total: Math.round(total * 100) / 100, // 保留两位小数
+      };
+    });
+  }, [data]);
 
   return (
     <section id="products" className="py-20">
@@ -54,8 +107,8 @@ export function Products() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-          {products.map((product, idx) => (
-            <Card key={idx} className="overflow-hidden hover:shadow-xl transition-shadow group flex flex-col">
+          {products.map((product) => (
+            <Card key={product.name} className="overflow-hidden hover:shadow-xl transition-shadow group flex flex-col">
               <div className="relative h-48 overflow-hidden">
                 <img 
                   src={product.image} 
@@ -75,12 +128,20 @@ export function Products() {
                   <div className="space-y-2 mb-4">
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-muted-foreground">{t('products.perGram')}</span>
-                      <span className="font-semibold">HKD {product.pricePerGram}</span>
+                      <span className="font-semibold">
+                        {typeof product.pricePerGram === 'string' 
+                          ? '--' 
+                          : `$${product.pricePerGram.toFixed(2)}`}
+                      </span>
                     </div>
                     {product.total && (
                       <div className="flex justify-between items-center">
                         <span className="text-sm text-muted-foreground">{t('products.total')}</span>
-                        <span className="font-bold text-accent">HKD {product.total.toLocaleString()}</span>
+                        <span className="font-bold text-accent">
+                          {typeof product.total === 'string' 
+                            ? '--' 
+                            : `$${product.total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                        </span>
                       </div>
                     )}
                   </div>

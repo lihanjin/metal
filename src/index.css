@@ -30,6 +30,9 @@
     --ring: 45 100% 50%;
     
     --radius: 0.5rem;
+
+    --popover: 0 0% 94%;
+    --popover-foreground: 210 40% 15%;
   }
 
   .dark {
@@ -55,6 +58,9 @@
     --border: 222 30% 22%;
     --input: 222 30% 18%;
     --ring: 45 100% 50%;
+
+    --popover: 222 47% 11%;
+    --popover-foreground: 0 0% 100%;
   }
 }
 

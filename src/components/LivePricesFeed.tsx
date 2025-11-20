@@ -285,7 +285,7 @@ export function LiveGoldPrices() {
   const { t } = useLanguage();
 
   // 仅获取黄金价格
-  const { data } = useTradeTickData([{ code: 'GOLD' }]);
+  const { data } = useTradeTickData();
 
   // 处理黄金价格数据
   const goldPrice = useMemo<MetalDisplay | null>(() => {

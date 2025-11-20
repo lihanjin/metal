@@ -25,7 +25,7 @@ export function Converter() {
   };
 
   return (
-    <section id="converter" className="py-20">
+    <section id="converter" className="py-20 bg-popover">
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-12">
