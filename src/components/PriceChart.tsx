@@ -1,19 +1,19 @@
-import { useEffect, useState } from 'react';
-import { metalsApi, type PriceHistory } from '../services/metalsApi';
+import { useMemo } from 'react';
+import type { KlineItem } from '@/hooks/use-kline-data';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from './ui/chart';
+import { AreaChart, Area, XAxis, YAxis } from 'recharts';
 
 interface PriceChartProps {
-  metalSymbol: string;
-  currentPrice: number;
+  klineList: KlineItem[];
 }
 
-export function PriceChart({ metalSymbol, currentPrice }: PriceChartProps) {
-  const [history, setHistory] = useState<PriceHistory[]>([]);
-
-  useEffect(() => {
-    // Generate 24-hour mock history for visualization
-    const mockHistory = metalsApi.generateMockHistory(currentPrice, 24);
-    setHistory(mockHistory);
-  }, [currentPrice]);
+export function PriceChart({ klineList }: PriceChartProps) {
+  const history = useMemo(() => {
+    return (klineList || []).map((k) => ({
+      timestamp: parseInt(k.timestamp) * 1000,
+      price: parseFloat(k.close_price),
+    }));
+  }, [klineList]);
 
   if (history.length === 0) {
     return (
@@ -23,75 +23,29 @@ export function PriceChart({ metalSymbol, currentPrice }: PriceChartProps) {
     );
   }
 
-  // Calculate min/max for scaling
-  const prices = history.map(h => h.price);
-  const minPrice = Math.min(...prices);
-  const maxPrice = Math.max(...prices);
-  const priceRange = maxPrice - minPrice;
-
-  // Generate SVG path for the price line
-  const width = 100;
-  const height = 100;
-  const points = history.map((h, i) => {
-    const x = (i / (history.length - 1)) * width;
-    const normalizedPrice = ((h.price - minPrice) / priceRange);
-    const y = height - (normalizedPrice * height);
-    return `${x},${y}`;
-  });
-
-  const pathData = `M ${points.join(' L ')}`;
-
-  // Create area fill path
-  const areaPath = `${pathData} L ${width},${height} L 0,${height} Z`;
-
-  // Determine trend color
   const isPositive = history[history.length - 1].price >= history[0].price;
-  const trendColor = isPositive ? '#10b981' : '#ef4444'; // green or red
-  const trendColorLight = isPositive ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)';
+  const config = { price: { label: 'Price', color: isPositive ? '#10b981' : '#ef4444' } };
 
   return (
-    <div className="h-24 relative">
-      <svg
-        viewBox={`0 0 ${width} ${height}`}
-        className="w-full h-full"
-        preserveAspectRatio="none"
-      >
-        {/* Area fill */}
-        <path
-          d={areaPath}
-          fill={trendColorLight}
-          opacity="0.3"
+    <ChartContainer config={config} className="h-24 aspect-auto">
+      <AreaChart data={history} margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
+        <defs>
+          <linearGradient id="priceGradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="var(--color-price)" stopOpacity={0.3} />
+            <stop offset="100%" stopColor="var(--color-price)" stopOpacity={0} />
+          </linearGradient>
+        </defs>
+        <XAxis
+          dataKey="timestamp"
+          hide={true}
         />
-        
-        {/* Price line */}
-        <path
-          d={pathData}
-          fill="none"
-          stroke={trendColor}
-          strokeWidth="2"
-          vectorEffect="non-scaling-stroke"
+        <YAxis
+          domain={["dataMin", "dataMax"]}
+          hide={true}
         />
-
-        {/* Grid lines for reference */}
-        <line
-          x1="0"
-          y1={height / 2}
-          x2={width}
-          y2={height / 2}
-          stroke="currentColor"
-          strokeWidth="0.5"
-          opacity="0.2"
-          vectorEffect="non-scaling-stroke"
-        />
-      </svg>
-
-      {/* Price labels */}
-      <div className="absolute top-0 right-0 text-[10px] text-muted-foreground">
-        ${maxPrice.toFixed(2)}
-      </div>
-      <div className="absolute bottom-0 right-0 text-[10px] text-muted-foreground">
-        ${minPrice.toFixed(2)}
-      </div>
-    </div>
+        <ChartTooltip content={<ChartTooltipContent />} />
+        <Area type="monotone" dataKey="price" stroke="var(--color-price)" fill="url(#priceGradient)" strokeWidth={2} dot={false} />
+      </AreaChart>
+    </ChartContainer>
   );
 }

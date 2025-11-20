@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { TrendingUp, TrendingDown, RefreshCw } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Card, CardContent } from './ui/card';
+import { Skeleton } from './ui/skeleton';
 import { PriceChart } from './PriceChart';
 import useKlineData, { KlineType } from '@/hooks/use-kline-data';
 import { useTradeTickData } from '@/hooks/use-trade-tick-data';
@@ -161,16 +162,41 @@ export function LivePricesFeed() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {loading && metals.every(m => m.price === '--') ? (
-            // 加载状态 - 显示3个骨架屏
             <>
               {[1, 2, 3].map((i) => (
                 <Card key={i} className="border-2">
                   <CardContent className="p-6">
-                    <div className="animate-pulse">
-                      <div className="h-7 bg-muted rounded w-24 mb-4"></div>
-                      <div className="h-8 bg-muted rounded w-32 mb-4"></div>
-                      <div className="h-8 bg-muted rounded w-32 mb-4"></div>
-                      <div className="h-32 bg-muted rounded"></div>
+                    <div className="flex items-center justify-between mb-4">
+                      <Skeleton className="h-7 w-24" />
+                      <Skeleton className="h-6 w-20 rounded" />
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center">
+                        <Skeleton className="h-4 w-20" />
+                        <Skeleton className="h-8 w-28" />
+                      </div>
+
+                      <div className="flex justify-between items-center">
+                        <Skeleton className="h-4 w-20" />
+                        <Skeleton className="h-8 w-28" />
+                      </div>
+
+                      <div className="pt-4 border-t">
+                        <div className="flex justify-between items-center mb-2">
+                          <Skeleton className="h-4 w-24" />
+                          <Skeleton className="h-4 w-20" />
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <Skeleton className="h-4 w-24" />
+                          <Skeleton className="h-4 w-20" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-6 pt-4 border-t">
+                      <Skeleton className="h-4 w-20 mb-2" />
+                      <Skeleton className="h-24 w-full rounded" />
                     </div>
                   </CardContent>
                 </Card>
@@ -256,8 +282,15 @@ export function LivePricesFeed() {
                       {t('prices.chart')}
                     </div>
                     <PriceChart
-                      metalSymbol={metal.symbol}
-                      currentPrice={metal.usdPerOz}
+                      klineList={(
+                        metal.symbol === 'GOLD'
+                          ? (goldData as any)?.data?.kline_list
+                          : metal.symbol === 'Silver'
+                          ? (silverData as any)?.data?.kline_list
+                          : metal.symbol === 'Platinum'
+                          ? (platinumData as any)?.data?.kline_list
+                          : []
+                      ) || []}
                     />
                   </div>
                 </CardContent>
