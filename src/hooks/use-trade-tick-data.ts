@@ -150,7 +150,7 @@ const fetchTradeTickData = async (
 
   try {
     // 发起请求
-    const response = await fetch('https://alltick.co/quote/trade-tick', {
+    const response = await fetch('https://mdx.aatest.online/quote/trade-tick', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

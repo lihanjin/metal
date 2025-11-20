@@ -149,7 +149,7 @@ const fetchKlineData = async (
 
   try {
     // 发起请求
-    const response = await fetch('https://alltick.co/quote/kline', {
+    const response = await fetch('https://mdx.aatest.online/quote/kline', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
