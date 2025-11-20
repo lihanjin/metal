@@ -84,10 +84,8 @@ const getCache = (key: string): TradeTickResponse | null => {
       return null;
     }
 
-    console.log('✅ 使用缓存数据');
     return cacheData.data;
   } catch (error) {
-    console.error('读取缓存失败:', error);
     return null;
   }
 };
@@ -102,9 +100,7 @@ const setCache = (key: string, data: TradeTickResponse): void => {
       timestamp: Date.now(),
     };
     localStorage.setItem(key, JSON.stringify(cacheData));
-    console.log('💾 数据已缓存');
   } catch (error) {
-    console.error('保存缓存失败:', error);
   }
 };
 
@@ -114,9 +110,7 @@ const setCache = (key: string, data: TradeTickResponse): void => {
 const clearCache = (key: string): void => {
   try {
     localStorage.removeItem(key);
-    console.log('🗑️ 缓存已清除');
   } catch (error) {
-    console.error('清除缓存失败:', error);
   }
 };
 
@@ -131,9 +125,7 @@ export const clearAllTradeTickCache = (): void => {
         localStorage.removeItem(key);
       }
     });
-    console.log('🗑️ 所有交易数据缓存已清除');
   } catch (error) {
-    console.error('清除所有缓存失败:', error);
   }
 };
 
@@ -177,12 +169,10 @@ const fetchTradeTickData = async (
 
     return result;
   } catch (error) {
-    console.error('❌ 请求失败:', error);
 
     // 请求失败时，尝试使用缓存数据
     const cachedData = getCache(cacheKey);
     if (cachedData) {
-      console.log('🔄 接口失败，使用缓存数据');
       return cachedData;
     }
 

@@ -90,10 +90,8 @@ const getCache = (key: string): KlineResponse | null => {
       return null;
     }
 
-    console.log('✅ 使用 K线缓存数据');
     return cacheData.data;
   } catch (error) {
-    console.error('读取 K线缓存失败:', error);
     return null;
   }
 };
@@ -108,9 +106,7 @@ const setCache = (key: string, data: KlineResponse): void => {
       timestamp: Date.now(),
     };
     localStorage.setItem(key, JSON.stringify(cacheData));
-    console.log('💾 K线数据已缓存');
   } catch (error) {
-    console.error('保存 K线缓存失败:', error);
   }
 };
 
@@ -125,9 +121,7 @@ export const clearAllKlineCache = (): void => {
         localStorage.removeItem(key);
       }
     });
-    console.log('🗑️ 所有 K线数据缓存已清除');
   } catch (error) {
-    console.error('清除所有 K线缓存失败:', error);
   }
 };
 
@@ -174,12 +168,10 @@ const fetchKlineData = async (
 
     return result;
   } catch (error) {
-    console.error('❌ K线请求失败:', error);
 
     // 请求失败时，尝试使用缓存数据
     const cachedData = getCache(cacheKey);
     if (cachedData) {
-      console.log('🔄 K线接口失败，使用缓存数据');
       return cachedData;
     }
 
