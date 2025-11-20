@@ -1,0 +1,56 @@
+# Node
+node_modules/
+
+# 构建输出
+dist/
+build/
+
+# Vite
+.vite/
+
+# TypeScript
+*.tsbuildinfo
+
+# 日志
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# 测试覆盖率
+coverage/
+
+# 环境变量（保留示例）
+.env
+.env.*
+!.env.example
+!.env.local.example
+
+# 操作系统
+.DS_Store
+
+# IDE/编辑器
+.vscode/
+.idea/
+*.iml
+
+# 临时/缓存
+tmp/
+temp/
+.tmp/
+.eslintcache
+
+# 个人 shell 文件（避免误提交）
+.bashrc
+.bash_logout
+.profile
+.sudo_as_admin_successful
+
+# 证书/密钥（避免误提交）
+*.pem
+*.p12
+
+# 备份/交换文件
+*~
+*.swp
