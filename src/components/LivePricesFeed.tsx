@@ -319,14 +319,25 @@ export function LiveGoldPrices() {
 
   // 仅获取黄金价格
   const { data } = useTradeTickData();
+  const { data: goldKlineData } = useKlineData({
+    code: 'GOLD',
+    kline_type: KlineType.ONE_MINUTE,
+  });
 
   // 处理黄金价格数据
   const goldPrice = useMemo<MetalDisplay | null>(() => {
-    if (!data) return null;
-    return (data as any)?.data?.tick_list?.find(
+    const tickItem = (data as any)?.data?.tick_list?.find(
       (item: any) => item.code === 'GOLD'
     );
-  }, [data]);
+    if (tickItem) return tickItem as any;
+
+    const list = (goldKlineData as any)?.data?.kline_list;
+    if (Array.isArray(list) && list.length) {
+      const latest = list[list.length - 1];
+      return { price: latest.close_price } as any;
+    }
+    return null;
+  }, [data, goldKlineData]);
 
   const currentTime = new Date().toLocaleTimeString('en-US', {
     hour: '2-digit',
