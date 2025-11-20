@@ -204,7 +204,7 @@ const translations = {
     'prices.chart': '24小時價格走勢',
     'prices.chartReady': '圖表就緒',
     'prices.apiPending': 'API整合進行中',
-    'prices.footer': '實時市場數據 • 每20秒更新',
+    'prices.footer': '實時市場數據 • 每30秒更新',
     
     // Gold Prices Widget
     'goldPrices.title': '黃金即時價格 (港元/盎司)',
@@ -215,7 +215,7 @@ const translations = {
     'goldPrices.premium': '溢價',
     'goldPrices.buyback': '本公司回購價',
     'goldPrices.bestRate': '最佳市場價',
-    'goldPrices.footer': '實時市場數據 • 每20秒更新價格',
+    'goldPrices.footer': '實時市場數據 • 每30秒更新',
     
     // Commitments Section
     'commitments.title': '我們的承諾',

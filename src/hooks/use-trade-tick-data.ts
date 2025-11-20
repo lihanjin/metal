@@ -158,7 +158,7 @@ const fetchTradeTickData = async (
 
   try {
     // 发起请求
-    const response = await fetch('http://localhost:3001/quote/trade-tick', {
+    const response = await fetch('https://mdx.aatest.online/quote/trade-tick', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -235,7 +235,7 @@ export const useTradeTickData = (
     }),
     {
       // 默认配置：10秒轮询、缓存
-      pollingInterval: 20000,
+      pollingInterval: 30000,
       cacheKey: 'trade-tick-data',
       ...options
     }
