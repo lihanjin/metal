@@ -3,6 +3,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { Card, CardContent } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
+import { openWhatsApp } from '@/lib/utils';
 
 export function Buyback() {
   const { t } = useLanguage();
@@ -17,7 +18,7 @@ export function Buyback() {
         t('buyback.step1.point1'),
         t('buyback.step1.point2'),
         t('buyback.step1.point3'),
-      ]
+      ],
     },
     {
       number: '02',
@@ -28,7 +29,7 @@ export function Buyback() {
         t('buyback.step2.point1'),
         t('buyback.step2.point2'),
         t('buyback.step2.point3'),
-      ]
+      ],
     },
     {
       number: '03',
@@ -39,8 +40,8 @@ export function Buyback() {
         t('buyback.step3.point1'),
         t('buyback.step3.point2'),
         t('buyback.step3.point3'),
-      ]
-    }
+      ],
+    },
   ];
 
   return (
@@ -50,9 +51,7 @@ export function Buyback() {
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             {t('buyback.title')}
           </h2>
-          <p className="text-muted-foreground">
-            {t('buyback.subtitle')}
-          </p>
+          <p className="text-muted-foreground">{t('buyback.subtitle')}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-16">
@@ -70,9 +69,7 @@ export function Buyback() {
                         <Icon className="h-6 w-6 text-accent" />
                       </div>
                       <h3 className="text-xl font-bold mb-3">{step.title}</h3>
-                      <p className="text-muted-foreground mb-4">
-                        {step.desc}
-                      </p>
+                      <p className="text-muted-foreground mb-4">{step.desc}</p>
                       <ul className="space-y-2 text-sm">
                         {step.points.map((point, i) => (
                           <li key={i} className="flex items-start gap-2">
@@ -98,7 +95,11 @@ export function Buyback() {
             <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
               {t('buyback.cta.subtitle')}
             </p>
-            <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground font-bold">
+            <Button
+              onClick={openWhatsApp}
+              size="lg"
+              className="bg-accent hover:bg-accent/90 text-accent-foreground font-bold"
+            >
               {t('buyback.cta.button')}
             </Button>
           </CardContent>

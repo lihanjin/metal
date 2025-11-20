@@ -4,6 +4,7 @@ import { Card, CardContent } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { useTradeTickData } from '../hooks/use-trade-tick-data';
+import { openWhatsApp } from '@/lib/utils';
 
 // 将金衡盎司转换为克的辅助函数
 const ozToGrams = (pricePerOz: number) => {
@@ -147,7 +148,8 @@ export function Products() {
                   </div>
                 </div>
 
-                <Button className="w-full h-10 bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
+                <Button               onClick={openWhatsApp}
+                 className="w-full h-10 bg-accent hover:bg-accent/90 text-accent-foreground font-semibold">
                   {t('products.cta')}
                 </Button>
               </CardContent>
