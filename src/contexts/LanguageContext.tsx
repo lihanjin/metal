@@ -17,7 +17,7 @@ const translations = {
     'nav.converter': 'Converter',
     'nav.about': 'About',
     'header.tagline': 'Licensed Hong Kong Dealer • Est. 2023',
-    'header.phone': '+852 1234 5678',
+    'header.phone': '+852 6949 7914',
     
     // Hero Section
     'hero.title': 'PASSTO METAL',
@@ -178,7 +178,7 @@ const translations = {
     'nav.converter': '換算',
     'nav.about': '關於',
     'header.tagline': '香港持牌經銷商 • 成立於2023年',
-    'header.phone': '+852 1234 5678',
+    'header.phone': '+852 6949 7914',
     
     // Hero Section
     'hero.title': 'PASSTO METAL',
