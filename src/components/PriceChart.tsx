@@ -26,15 +26,16 @@ export function PriceChart({ klineList }: PriceChartProps) {
   }
 
   const isPositive = history[history.length - 1].price >= history[0].price;
-  const config = { price: { label: t('prices.price'), color: isPositive ? '#10b981' : '#ef4444' } };
+  const color =  '#ef4444';
+  const config = { price: { label: t('prices.price'), color } };
 
   return (
     <ChartContainer config={config} className="h-24 aspect-auto">
       <AreaChart data={history} margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
         <defs>
           <linearGradient id="priceGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="var(--color-price)" stopOpacity={0.3} />
-            <stop offset="100%" stopColor="var(--color-price)" stopOpacity={0} />
+            <stop offset="0%" stopColor={color} stopOpacity={0.3} />
+            <stop offset="100%" stopColor={color} stopOpacity={0} />
           </linearGradient>
         </defs>
         <XAxis
@@ -46,7 +47,7 @@ export function PriceChart({ klineList }: PriceChartProps) {
           hide={true}
         />
         <ChartTooltip content={<ChartTooltipContent />} />
-        <Area type="monotone" dataKey="price" stroke="var(--color-price)" fill="url(#priceGradient)" strokeWidth={2} dot={false} />
+        <Area type="monotone" dataKey="price" stroke={color} fill="url(#priceGradient)" strokeWidth={2} dot={false} />
       </AreaChart>
     </ChartContainer>
   );
